@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 #include <unordered_map>
+#include <vector>
+#include <QFileInfo>
 
 std::vector<std::string> rows{
     "id",
@@ -48,55 +50,54 @@ std::vector<std::string> rows{
     "register_type"
 };
 
-int main() {
+void convertXmlToCsv(const std::string& inputFile, const std::string& outputFile = "") {
+    // Load XML file
     pugi::xml_document docIn;
-    pugi::xml_parse_result result = docIn.load_file("database.xml");
+    pugi::xml_parse_result result = docIn.load_file(inputFile.c_str());
     if (!result) {
         std::cerr << "Error parsing XML: " << result.description() << std::endl;
-        return 1;
+        return;
     }
-    std::ofstream csv_file("output.csv");
-    std::unordered_map<long long,std::vector<std::string>> dataVector;
-    int counter=0;
+
+    // Extract the directory from the input file path
+    QFileInfo fileInfo(QString::fromStdString(inputFile));
+    QString outputFilePath;
+
+    // If output file is not provided, save CSV with the same name as the XML file but with a .csv extension
+    if (outputFile.empty()) {
+        outputFilePath = fileInfo.absolutePath() + "/" + fileInfo.completeBaseName() + ".csv";
+    } else {
+        outputFilePath = QString::fromStdString(outputFile);
+    }
+
+    std::ofstream csv_file(outputFilePath.toStdString());
+    std::unordered_map<long long, std::vector<std::string>> dataVector;
+
     // Extract attributes from <goods>
     for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record")) {
-        
         std::vector<std::string> values;
-        for (auto& i : rows)
-        {
-            values.push_back(record.attribute(i.c_str()).value());
+        for (const auto& row : rows) {
+            values.push_back(record.attribute(row.c_str()).value());
         }
-        dataVector[record.attribute("id").as_uint()]=values;
-        counter++;        
+        dataVector[record.attribute("id").as_uint()] = values;
     }
-    // Extract attributes from <>
-    /*for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record"))
-    {
-        if (record.attribute("id").value());
-    }*/
-    //csv file 
-    for (auto it = rows.begin(); it!=rows.end();it++)
-    {
-        if (it != rows.begin()) {
-            csv_file << ",";
-        }
-        csv_file << *it;
+
+    // Write CSV headers
+    for (const auto& row : rows) {
+        csv_file << row << ",";
     }
+    csv_file.seekp(-1, std::ios_base::end); // Remove last comma
     csv_file << "\n";
-    for (auto& i : dataVector)
-    {
-        auto stringVec = i.second;
-        for (auto it = stringVec.begin();it!= stringVec.end();it++)
-        {
-            if (it != stringVec.begin()) {
-                csv_file << ",";
-            }
-            csv_file << *it;
+
+    // Write CSV data
+    for (const auto& [key, stringVec] : dataVector) {
+        for (const auto& value : stringVec) {
+            csv_file << value << ",";
         }
+        csv_file.seekp(-1, std::ios_base::end); // Remove last comma
         csv_file << "\n";
     }
-    std::cout << "обработано:" << counter << " позиций";
-    csv_file.close();
-    std::cout << "CSV файл успешно создан." << std::endl;
- }
 
+    csv_file.close();
+    std::cout << "CSV file saved at: " << outputFilePath.toStdString() << std::endl;
+}
