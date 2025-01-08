@@ -129,10 +129,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="main.h" />
+    <ClInclude Include="warhouse.h" />
+    <ClInclude Include="xmlExtractor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\pugixml.cpp" />
+    <ClCompile Include="warhouse.cpp" />
+    <ClCompile Include="xmlExtractor.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

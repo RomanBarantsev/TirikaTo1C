@@ -18,12 +18,24 @@
     <ClInclude Include="main.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="warhouse.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="xmlExtractor.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="src\pugixml.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="warhouse.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="xmlExtractor.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
