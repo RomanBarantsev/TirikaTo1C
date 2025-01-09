@@ -6,42 +6,13 @@
 #include <map>
 #include <optional>
 
-std::optional<std::pair<size_t, std::string>> extractShopDetails(const std::string& settingsValue) {
-    size_t commaPos = settingsValue.find(',');
-    if (commaPos != std::string::npos) {
-        // Extract the shop number (substring before the comma)
-        std::string shopNumber = settingsValue.substr(0, commaPos);
-
-        // Extract the shop name (substring after the comma)
-        std::string shopName = settingsValue.substr(commaPos + 1);
-        return std::make_pair(std::stoi(shopNumber), shopName);
-    }
-    else 
-        return std::nullopt;
-}
 
 int main() {
    
     std::ofstream csv_file("output.csv");
     
 
-    ////find all shops
-    //std::map<size_t, warehouse> warehouses;
-    //for (pugi::xml_node record = docIn.child("data").child("tables").child("settings").child("record"); record; record = record.next_sibling("record")) {
-    //    auto firstAttribute = record.first_attribute();
-    //    auto secondAttribute = record.first_attribute().next_attribute();
-    //    std::string firstValue = firstAttribute.value();
-    //    std::string secondValue = secondAttribute.value();
-    //    if (firstValue.find("SHOP")!=-1) {
-    //        if (extractShopDetails(secondValue)!=std::nullopt)
-    //        {
-    //            auto res = extractShopDetails(secondValue);
-    //            warehouse wH(res.value().second, goodsAttributes);
-    //            warehouses.emplace(res.value().first, wH);
-    //        }
-    //        std::cout << std::endl;
-    //    }
-    //}
+    
 
     /*int counter = 0;
     for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record")) {        
