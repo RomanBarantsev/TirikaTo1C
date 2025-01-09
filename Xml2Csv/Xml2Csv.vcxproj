@@ -128,11 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="csvRecord.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="warhouse.h" />
     <ClInclude Include="xmlExtractor.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="csvRecord.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\pugixml.cpp" />
     <ClCompile Include="warhouse.cpp" />

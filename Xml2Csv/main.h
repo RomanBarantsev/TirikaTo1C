@@ -5,37 +5,15 @@
 #include <unordered_map>
 #include <map>
 #include <optional>
+#include "xmlExtractor.h"
 
 
 int main() {
-   
-    std::ofstream csv_file("output.csv");
-    
-
-    
-
-    /*int counter = 0;
-    for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record")) {        
-        std::vector<std::string> values;
-        for (auto& i : goodsAttributes)
-        {
-            values.push_back(record.attribute(i.c_str()).value());
-        }
-        dataVector[record.attribute("id").as_uint()]=values;
-        counter++;        
-    }    */
-
-    ////csv file goodAttributes to header 
-    //for (auto it = goodsAttributes.begin(); it!= goodsAttributes.end();it++)
-    //{
-    //    if (it != goodsAttributes.begin()) {
-    //        csv_file << ",";
-    //    }
-    //    csv_file << *it;
-    //}
-    //csv_file << "\n";
-
-
+    xmlExtractor xml("C:/database-export.xml");
+    using Attrib = std::vector<std::string>;
+    Attrib goods = xml.extractAttributes("goods");
+    Attrib remains = xml.extractAttributes("remainders");
+    auto data = xml.extractGoods(goods);
     /*for (auto& i : dataVector)
     {
         auto stringVec = i.second;

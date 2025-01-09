@@ -10,6 +10,7 @@ class xmlExtractor
 {
 private:
     pugi::xml_document docIn;
+    using dataType = std::vector<std::vector<std::string>>;
 
     std::optional<std::pair<size_t, std::string>> extractShopDetails(const std::string& settingsValue) {
         size_t commaPos = settingsValue.find(',');
@@ -27,51 +28,23 @@ private:
 
 public:
     xmlExtractor(std::string path) {
-        pugi::xml_parse_result result = docIn.load_file("h:\database-export.xml");
+        pugi::xml_parse_result result = docIn.load_file(path.c_str());
         if (!result) {
-            std::cerr << "Error parsing XML: " << result.description() << std::endl;            
+            std::cerr << "Error parsing XML: " << result.description() << std::endl;
         } 
     };
+
     ~xmlExtractor() {};
-    std::vector<std::string> extractGoodAttributes() {
-        std::vector<std::string> goodsAttributes;
-        pugi::xml_node goods = docIn.child("data").child("tables").child("goods"); //root node
-        if (goods) {
-            auto firstGood = *goods.children("record").begin(); // extrude from first good all attributes
-            for (pugi::xml_attribute attr : firstGood.attributes()) {
-                goodsAttributes.push_back(attr.name());
-            }
-        }
-        else {
-            std::cerr << "No 'goods' node found!" << std::endl;
-        }
-        return goodsAttributes;
-    };
 
-    std::vector<std::string> extractRemaindersAttributes(){
-        std::vector<std::string> remaindersAttributes;
-        pugi::xml_node remainders = docIn.child("data").child("tables").child("remainders"); //root node
-        if (remainders) {
-            auto firstRemainders = *remainders.children("record").begin(); // extrude from first good all attributes
-            for (pugi::xml_attribute attr : firstRemainders.attributes()) {
-                remaindersAttributes.push_back(attr.name());
-            }
-        }
-        else {
-            std::cerr << "No 'remainders' node found!" << std::endl;
-        }
-        return remaindersAttributes;
-    };
-
-    void findWarhouses() {        
+    std::map<size_t, std::string> findWarhouses() {
         std::map<size_t, std::string> warehouses;
         for (pugi::xml_node record = docIn.child("data").child("tables").child("settings").child("record"); record; record = record.next_sibling("record")) {
             auto firstAttribute = record.first_attribute();
             auto secondAttribute = record.first_attribute().next_attribute();
             std::string firstValue = firstAttribute.value();
             std::string secondValue = secondAttribute.value();
-            if (firstValue.find("SHOP")!=-1) {
-                if (extractShopDetails(secondValue)!=std::nullopt)
+            if (firstValue.find("SHOP") != -1) {
+                if (extractShopDetails(secondValue) != std::nullopt)
                 {
                     auto res = extractShopDetails(secondValue);
                     warehouses.emplace(res.value().first, res.value().second);
@@ -79,6 +52,39 @@ public:
                 std::cout << std::endl;
             }
         }
+        return warehouses;
     }
+
+    std::vector<std::string> extractAttributes(std::string table){
+        std::vector<std::string> Attributes;
+        pugi::xml_node remainders = docIn.child("data").child("tables").child(table.c_str()); //root node
+        if (remainders) {
+            auto firstRemainders = *remainders.children("record").begin(); // extrude from first good all attributes
+            for (pugi::xml_attribute attr : firstRemainders.attributes()) {
+                Attributes.push_back(attr.name());
+            }
+        }
+        else {
+            std::cerr << "No " << table << " node found!" << std::endl;
+        }
+        return Attributes;
+    };
+    
+    dataType extractGoods(const std::vector<std::string>& goodAtr){
+        int counter = 0;
+        dataType data;
+        for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record")) {
+            std::vector<std::string> values;
+            for (auto& i : goodAtr)
+            {
+                values.push_back(record.attribute(i.c_str()).value());
+            }
+            data[record.attribute("id").as_uint()]=values;
+            counter++;
+        }    
+        return data;
+    }
+
+
 };
 
