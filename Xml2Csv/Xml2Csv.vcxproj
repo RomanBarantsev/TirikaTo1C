@@ -129,16 +129,22 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="csvRecord.h" />
+    <ClInclude Include="datatypes.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="warhouse.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="warehouse.h" />
     <ClInclude Include="xmlExtractor.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="csvRecord.cpp" />
+    <ClCompile Include="datatypes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\pugixml.cpp" />
-    <ClCompile Include="warhouse.cpp" />
+    <ClCompile Include="warehouse.cpp" />
     <ClCompile Include="xmlExtractor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xml2Csv.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

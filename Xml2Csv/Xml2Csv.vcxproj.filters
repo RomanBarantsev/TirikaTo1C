@@ -18,13 +18,19 @@
     <ClInclude Include="main.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="warhouse.h">
+    <ClInclude Include="warehouse.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="xmlExtractor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="csvRecord.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="datatypes.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,7 +41,7 @@
     <ClCompile Include="src\pugixml.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="warhouse.cpp">
+    <ClCompile Include="warehouse.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="xmlExtractor.cpp">
@@ -44,5 +50,13 @@
     <ClCompile Include="csvRecord.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="datatypes.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Xml2Csv.rc">
+      <Filter>Файлы ресурсов</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

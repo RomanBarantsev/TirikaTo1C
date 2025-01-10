@@ -1,6 +1,7 @@
 #pragma once
 #include "src/pugixml.hpp"
-#include "warhouse.h"
+#include "warehouse.h"
+#include "datatypes.h"
 #include <iostream>
 #include <vector>
 #include <map>
@@ -10,7 +11,6 @@ class xmlExtractor
 {
 private:
     pugi::xml_document docIn;
-    using dataType = std::vector<std::vector<std::string>>;
 
     std::optional<std::pair<size_t, std::string>> extractShopDetails(const std::string& settingsValue) {
         size_t commaPos = settingsValue.find(',');
@@ -55,8 +55,8 @@ public:
         return warehouses;
     }
 
-    std::vector<std::string> extractAttributes(std::string table){
-        std::vector<std::string> Attributes;
+    dataTypes::attributes extractAttributes(std::string table){
+        dataTypes::attributes Attributes;
         pugi::xml_node remainders = docIn.child("data").child("tables").child(table.c_str()); //root node
         if (remainders) {
             auto firstRemainders = *remainders.children("record").begin(); // extrude from first good all attributes
@@ -70,16 +70,16 @@ public:
         return Attributes;
     };
     
-    dataType extractGoods(const std::vector<std::string>& goodAtr){
+    dataTypes::data extractData(const std::vector<std::string>& attributes, std::string table){
         int counter = 0;
-        dataType data;
-        for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record")) {
+        dataTypes::data data;
+        for (pugi::xml_node record = docIn.child("data").child("tables").child(table.c_str()).child("record"); record; record = record.next_sibling("record")) {
             std::vector<std::string> values;
-            for (auto& i : goodAtr)
+            for (auto& i : attributes)
             {
                 values.push_back(record.attribute(i.c_str()).value());
             }
-            data[record.attribute("id").as_uint()]=values;
+            data.push_back(values);
             counter++;
         }    
         return data;
