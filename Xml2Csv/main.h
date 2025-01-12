@@ -7,36 +7,33 @@
 #include <optional>
 #include "xmlExtractor.h"
 #include "datatypes.h"
+#include "database.h"
 
 
 int main() {
     xmlExtractor xml("C:/database-export.xml");
     dataTypes::attributes goodsAttributes = xml.extractAttributes("goods");
-    dataTypes::attributes remainsAttributes = xml.extractAttributes("remainders");
-    auto dataGoods = xml.extractData(goodsAttributes,"goods");
-    auto dataGoods = xml.extractData(remainsAttributes,"remains");
-    std::shared_ptr<dataTypes::data> shr_goodsAttr = make_shared<dataTypes::data>(dataGoods);
+    dataTypes::attributes remaindersAttributes = xml.extractAttributes("remainders");
+    dataTypes::data remaindersData = xml.extractData(remaindersAttributes,"remainders");
+    dataTypes::data goodsData = xml.extractData(remaindersAttributes,"remainders");
+
+    database DB(goodsAttributes, remaindersAttributes, goodsData);
     auto warehousesList = xml.findWarhouses();
     std::map<size_t,warehouse> warehouses;
     for (const auto& wh : warehousesList)
-    {        
-        warehouse warh("1", shr_goodsAttr, remainsAttributes);
-        warhouses.push_back()
+    {   
+        warehouse warh(wh.second);
+        warehouses.emplace(wh.first,warh);
     }
-    /*for (auto& i : dataVector)
+    //put remainders in warhouses
+    for (const auto& remain : remaindersData)
     {
-        auto stringVec = i.second;
-        for (auto it = stringVec.begin();it!= stringVec.end();it++)
-        {
-            if (it != stringVec.begin()) {
-                csv_file << ",";
-            }
-            csv_file << *it;
-        }
-        csv_file << "\n";
+        //size_t shopNumber = std::stoi(remain[0]);
+        //auto& wh = warehouses.at(shopNumber);
+        //wh.addRemains(remain);
     }
-    std::cout << "обработано:" << counter << " позиций";
-    csv_file.close();
-    std::cout << "CSV файл успешно создан." << std::endl;*/
+
+    //adding header to csv
+    
  }
 

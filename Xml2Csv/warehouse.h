@@ -6,16 +6,28 @@
 class warehouse {
 private:
     std::string m_name;
-    dataTypes::attributes m_goodsAttributes,m_remainsAttribute;
     dataTypes::data m_remains;
-    std::shared_ptr<dataTypes::data> m_goods;
 public:
-    warehouse(std::string name, dataTypes::attributes goodsAttributes, dataTypes::attributes remainsAttribute) :
-        m_name(name),
-        m_goodsAttributes(goodsAttributes)
+    warehouse(std::string name) :
+        m_name(name)
     {
 
     };
     ~warehouse() {};
-    warehouse(warehouse& other) {};
+    warehouse(warehouse& other) 
+    {
+        m_name=other.m_name;
+        m_remains = other.m_remains;
+    };
+    std::string getName() {
+        return m_name;
+    }
+    
+    dataTypes::data getRemains() {
+        return m_remains;
+    }
+
+    void addRemains(size_t key,dataTypes::attributes data) {
+        m_remains.emplace(key,data);
+    }
 };

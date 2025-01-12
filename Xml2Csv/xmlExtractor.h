@@ -36,8 +36,8 @@ public:
 
     ~xmlExtractor() {};
 
-    std::map<size_t, std::string> findWarhouses() {
-        std::map<size_t, std::string> warehouses;
+    std::map<const size_t, std::string> findWarhouses() {
+        std::map<const size_t, std::string> warehouses;
         for (pugi::xml_node record = docIn.child("data").child("tables").child("settings").child("record"); record; record = record.next_sibling("record")) {
             auto firstAttribute = record.first_attribute();
             auto secondAttribute = record.first_attribute().next_attribute();
@@ -70,16 +70,20 @@ public:
         return Attributes;
     };
     
-    dataTypes::data extractData(const std::vector<std::string>& attributes, std::string table){
+    dataTypes::data extractData(const std::vector<std::string>& attributes, std::string table,std::string keyAttribute="") {
         int counter = 0;
         dataTypes::data data;
         for (pugi::xml_node record = docIn.child("data").child("tables").child(table.c_str()).child("record"); record; record = record.next_sibling("record")) {
             std::vector<std::string> values;
+            size_t key;
             for (auto& i : attributes)
             {
+                if (i == keyAttribute) {
+                    key = std::stoi(record.attribute(i.c_str()).value());
+                }
                 values.push_back(record.attribute(i.c_str()).value());
             }
-            data.push_back(values);
+            data.emplace(key,values);
             counter++;
         }    
         return data;

@@ -129,6 +129,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="csvRecord.h" />
+    <ClInclude Include="database.h" />
     <ClInclude Include="datatypes.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
@@ -137,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="csvRecord.cpp" />
+    <ClCompile Include="database.cpp" />
     <ClCompile Include="datatypes.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\pugixml.cpp" />
