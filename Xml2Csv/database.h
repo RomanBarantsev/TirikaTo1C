@@ -5,7 +5,6 @@
 class database
 {
 private:
-	dataTypes::attributes m_goodsAttributes, m_remaindersAttributes;
 	dataTypes::data m_goodsData;
 public:
 	database() = delete;
