@@ -55,11 +55,25 @@ public:
         return warehouses;
     }
 
-     
-     std::map<size_t,tables::good> extractGoods() {
+    dataTypes::attributes extractAttributes(std::string table){
+        dataTypes::attributes Attributes;
+        pugi::xml_node remainders = docIn.child("data").child("tables").child(table.c_str()); //root node
+        if (remainders) {
+            auto firstRemainders = *remainders.children("record").begin(); // extrude from first good all attributes
+            for (pugi::xml_attribute attr : firstRemainders.attributes()) {
+                Attributes.push_back(attr.name());
+            }
+        }
+        else {
+            std::cerr << "No " << table << " node found!" << std::endl;
+        }
+        return Attributes;
+    };
+    
+    dataTypes::data extractData(const std::vector<std::string>& attributes, std::string table,std::string keyAttribute="") {
         int counter = 0;
-        std::map<size_t, tables::good> data;
-        for (pugi::xml_node record = docIn.child("data").child("tables").child("goods").child("record"); record; record = record.next_sibling("record")) {
+        dataTypes::data data;
+        for (pugi::xml_node record = docIn.child("data").child("tables").child(table.c_str()).child("record"); record; record = record.next_sibling("record")) {
             std::vector<std::string> values;
             size_t key;
             for (auto& i : attributes)

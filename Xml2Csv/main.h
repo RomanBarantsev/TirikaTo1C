@@ -12,9 +12,10 @@
 
 int main() {
     xmlExtractor xml("C:/database-export.xml");
-    
-    dataTypes::data remaindersData = xml.extractData(remaindersAttributes,"remainders","shop_id");
-    dataTypes::data goodsData = xml.extractData(remaindersAttributes,"remainders","record id");
+    dataTypes::attributes goodsAttributes = xml.extractAttributes("goods");
+    dataTypes::attributes remaindersAttributes = xml.extractAttributes("remainders");
+    dataTypes::data remaindersData = xml.extractData(remaindersAttributes,"remainders");
+    dataTypes::data goodsData = xml.extractData(remaindersAttributes,"remainders");
 
     database DB(goodsAttributes, remaindersAttributes, goodsData);
     auto warehousesList = xml.findWarhouses();
@@ -27,9 +28,9 @@ int main() {
     //put remainders in warhouses
     for (const auto& remain : remaindersData)
     {
-        size_t shopNumber = std::stoi(remain[0]);
-        auto& wh = warehouses.at(shopNumber);
-        wh.addRemains(remain);
+        //size_t shopNumber = std::stoi(remain[0]);
+        //auto& wh = warehouses.at(shopNumber);
+        //wh.addRemains(remain);
     }
 
     //adding header to csv
