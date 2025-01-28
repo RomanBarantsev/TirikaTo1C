@@ -3,6 +3,8 @@
 #include <vector>
 #include "datatypes.h"
 
+//warehouse entity, which helps to distribute all the remains through different warehouses
+
 class warehouse {
 private:
     std::string m_name;

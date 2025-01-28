@@ -8,32 +8,52 @@
 #include "xmlExtractor.h"
 #include "datatypes.h"
 #include "database.h"
+#include "csvRecord.h"
 
 
 int main() {
+    //init database
     xmlExtractor xml("C:/database-export.xml");
+    auto warehousesList = xml.findWarhouses();
     dataTypes::attributes goodsAttributes = xml.extractAttributes("goods");
     dataTypes::attributes remaindersAttributes = xml.extractAttributes("remainders");
-    dataTypes::data remaindersData = xml.extractData(remaindersAttributes,"remainders");
-    dataTypes::data goodsData = xml.extractData(remaindersAttributes,"remainders");
-
+    dataTypes::data remaindersData = xml.extractData(remaindersAttributes,"remainders","shop_id");
+    dataTypes::data goodsData = xml.extractData(goodsAttributes,"goods","id");
     database DB(goodsAttributes, remaindersAttributes, goodsData);
-    auto warehousesList = xml.findWarhouses();
+
+    //make warehouses map 
     std::map<size_t,warehouse> warehouses;
     for (const auto& wh : warehousesList)
     {   
         warehouse warh(wh.second);
-        warehouses.emplace(wh.first,warh);
+        warehouses.emplace(wh.first,warh);        
     }
+
     //put remainders in warhouses
     for (const auto& remain : remaindersData)
     {
-        //size_t shopNumber = std::stoi(remain[0]);
-        //auto& wh = warehouses.at(shopNumber);
-        //wh.addRemains(remain);
+        size_t shopNumber = remain.first;
+        auto& wh = warehouses.at(shopNumber);
+        wh.addRemains(remain.first,remain.second);
     }
 
     //adding header to csv
-    
+    csvRecord csvRec("D:/");
+    dataTypes::attributes newLine;
+    for (auto& rmAtr : remaindersAttributes)
+    {
+        if (rmAtr == "good_id")
+        {
+            for (auto& goodAtr : goodsAttributes)
+            {
+                newLine.push_back(goodAtr);
+            }
+        }
+        else
+        {
+            newLine.push_back(rmAtr);
+        }
+    }
+    csvRec.addingLine(newLine);
  }
 

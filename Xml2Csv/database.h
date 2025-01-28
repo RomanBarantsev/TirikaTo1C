@@ -1,5 +1,6 @@
 #pragma once
 #include "datatypes.h"
+
 //class for non-unique data, which is exist for every warhouse.
 
 class database

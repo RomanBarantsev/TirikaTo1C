@@ -7,6 +7,8 @@
 #include <map>
 #include <optional>
 
+//this class purpose to extract all data from xml file, which can be unloaded from Tirika shop through vygruzka-dannyh.bat file
+
 class xmlExtractor
 {
 private:
@@ -70,12 +72,12 @@ public:
         return Attributes;
     };
     
-    dataTypes::data extractData(const std::vector<std::string>& attributes, std::string table,std::string keyAttribute="") {
+    dataTypes::data extractData(const std::vector<std::string>& attributes, std::string table,std::string keyAttribute) {
         int counter = 0;
         dataTypes::data data;
         for (pugi::xml_node record = docIn.child("data").child("tables").child(table.c_str()).child("record"); record; record = record.next_sibling("record")) {
             std::vector<std::string> values;
-            size_t key;
+            size_t key=0;
             for (auto& i : attributes)
             {
                 if (i == keyAttribute) {
